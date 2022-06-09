@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:poue="http://primefaces.org/ui/extensions">
+
+<ui:composition>
+
+	<h:form id="idleForm">
+		<p:idleMonitor timeout="#{timeoutMB.idleTimeout}"
+			onidle="PF('timeoutTimer').start()"
+			onactive="PF('timeoutTimer').stop(true); PF('timeoutTimer').start();">
+			<p:ajax event="active" listener="#{timeoutMB.keepSessionAlive}"
+				update=":growl"
+				onerror="PF('growl').renderMessage({'summary':'Lo sentimos, intentelo más tarde','detail':'Existe un problema de conexión con el servidor','severity':'warn'})" />
+		</p:idleMonitor>
+
+		<p:outputPanel layout="inline">
+			<poue:timer widgetVar="timeoutTimer" timeout="#{timeoutMB.timeout}"
+				format="mm:ss" update=":growl" singleRun="false"
+				listener="#{timeoutMB.onTimerComplete}" />
+			<h:outputText value=" min." />
+		</p:outputPanel>
+	</h:form>
+
+</ui:composition>
+
+</html>

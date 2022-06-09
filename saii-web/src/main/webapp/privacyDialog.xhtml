@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:poue="http://primefaces.org/ui/extensions">
+
+    <ui:composition>
+
+	<h:form id="PrivacyForm">
+        <p:dialog id="PrivacyDlg" widgetVar="PrivacyDialog" header="Aviso de Privacidad" modal="true" resizable="false" responsive="true" appendTo="@(body)">            
+                <p:panelGrid columns="1" columnClasses="ui-grid-col-12" layout="grid" styleClass="ui-panelgrid-blank">                        
+                    <poue:documentViewer height="500" width="700" zoom="75" url="/AvisoPrivacidad.pdf" />                        
+                </p:panelGrid>            
+        </p:dialog>
+	</h:form>
+	
+    </ui:composition>
+
+</html>

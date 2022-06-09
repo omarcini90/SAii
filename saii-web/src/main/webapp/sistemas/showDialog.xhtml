@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="SistemasViewDlg" widgetVar="SistemasViewDialog" modal="true" resizable="false" responsive="true" appendTo="@(body)" header="#{bundle.ViewSistemasTitle}">
+            <h:form id="SistemasViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" columnClasses="ui-grid-col-3, ui-grid-col-9" layout="grid" styleClass="ui-panelgrid-blank" rendered="#{sistemasController.selected != null}">
+                        <p:outputLabel value="#{bundle.ViewSistemasLabel_acronimo}"/>
+                        <h:outputText value="#{sistemasController.selected.acronimo}" title="#{bundle.ViewSistemasTitle_acronimo}"/>
+                        
+                        <p:outputLabel value="#{bundle.ViewSistemasLabel_descripcion}"/>
+                        <h:outputText value="#{sistemasController.selected.descripcion}" title="#{bundle.ViewSistemasTitle_descripcion}"/>
+                        
+                        <p:outputLabel value="#{bundle.ViewSistemasLabel_urlRepositorio}"/>
+                        <h:outputText value="#{sistemasController.selected.urlRepositorio}" title="#{bundle.ViewSistemasTitle_urlRepositorio}"/>
+                        
+                        <p:outputLabel value="#{bundle.ViewSistemasLabel_ultimaVersion}"/>
+                        <h:outputText value="#{sistemasController.selected.ultimaVersion}" title="#{bundle.ViewSistemasTitle_ultimaVersion}"/>
+                        
+                        <p:outputLabel value="Actualización:"/>
+                        <h:outputText value="#{sistemasController.selected.fechaModificacion}" title="#{bundle.ViewSistemasTitle_fechaModificacion}">
+                            <f:convertDateTime pattern="dd/MM/yyyy" />
+                        </h:outputText>
+                    </p:panelGrid>
+                    <p:panelGrid columns="1" columnClasses="ui-grid-col-12" layout="grid" styleClass="ui-panelgrid-blank" style="align-content: center; text-align: center;">
+                        <p:commandButton value="#{bundle.Close}" onclick="PF('SistemasViewDialog').hide();" process="@this" partialSubmit="true"
+                                         icon="fa fa-times" style="width: 100px; height: 40px; border-color: #212223; color: #212223; background-color: #FFFFFF;"/>        
+                    </p:panelGrid>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

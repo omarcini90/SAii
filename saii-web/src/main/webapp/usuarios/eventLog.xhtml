@@ -1,0 +1,84 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:poue="http://primefaces.org/ui/extensions">
+
+    <ui:composition template="/WEB-INF/templates/fullLayoutTemplate.xhtml">
+
+        <ui:define name="title">
+            <h:outputText value="Bitácora de Eventos"></h:outputText>
+        </ui:define>
+        
+        <ui:define name="content">
+            <h:form id="BitacoraListForm">
+                <p:panel header="Bitácora de Eventos">
+                    <p:dataTable id="datalist" widgetVar="datalist" reflow="true" value="#{loginMB.eventLog}" var="event"
+                                 selectionMode="single" selection="#{loginMB.selectedEvent}"
+                                 filteredValue="#{loginMB.filteredEvents}"
+                                 draggableColumns="true"
+                                 resizableColumns="true"
+                                 liveResize="true"
+                                 paginator="true"
+                                 rowKey="#{event.idBitacora}"
+                                 rows="20"
+                                 rowsPerPageTemplate="20,40,60"
+                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
+                                 paginatorPosition="bottom">
+                        
+                        <p:ajax event="rowSelect" update="viewButton"/>
+                        
+                        <f:facet name="header">
+                            <p:outputPanel layout="inline" style=" text-align: center;">
+                                <p:outputLabel value="Filtrar por:"/>
+                                <p:inputText id="globalFilter" onkeyup="PF('datalist').filter();" style="width:150px" placeholder="Texto..."/>
+                                <p:spacer width="20"/>
+                                <p:commandButton id="toggler" type="button" value="Mostrar/Ocultar columnas" style="width: 250px;" icon="ui-icon-calculator" />
+                                <p:columnToggler datasource="datalist" trigger="toggler" />
+                            </p:outputPanel>
+                        </f:facet>
+
+                        <f:facet name="{Exporters}">
+                            <h:commandLink class="fa fa-file-excel-o" title="Excel">
+                                <p:dataExporter type="xlsx"  encoding="UTF-8" target="datalist" fileName="Bitacora_#{defaultsMB.fullFormattedDate}" />
+                            </h:commandLink>
+                        </f:facet>
+
+                        <p:column headerText="ID">
+                            <h:outputText value="#{event.idBitacora}"/>
+                        </p:column>
+                        <p:column headerText="Institución" filterBy="#{event.idUsuario.idInstitucion.nombre}" filterMatchMode="contains">
+                            <h:outputText value="#{event.idUsuario.idInstitucion.nombre}"/>
+                        </p:column>
+                        <p:column headerText="Responsable" filterBy="#{event.idUsuario.nombreCompleto}" filterMatchMode="contains">
+                            <h:outputText value="#{event.idUsuario.nombreCompleto}"/>
+                        </p:column>
+                        <p:column headerText="Evento" filterBy="#{event.evento}" filterMatchMode="contains">
+                            <h:outputText value="#{event.evento}"/>
+                        </p:column>
+                        <p:column headerText="Fecha">
+                            <h:outputText value="#{event.fecha}">
+                                <f:convertDateTime pattern="dd/MM/yyyy HH:mm" timeZone="#{defaultsMB.cdmxTimeZone}"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Funciones">
+                            <p:commandLink id="viewButton" title="#{bundle.View}" styleClass="fa fa-search" style="float:left;margin-right:10px" update=":BitacoraViewForm" oncomplete="PF('BitacoraViewDialog').show()">
+                                <f:setPropertyActionListener value="#{event}" target="#{loginMB.selectedEvent}" />
+                            </p:commandLink>
+                        </p:column>
+                    </p:dataTable>
+                </p:panel>
+
+                <p:contextMenu for="datalist">
+                    <p:menuitem value="#{bundle.View}" update=":BitacoraViewForm" icon="fa fa-search" oncomplete="PF('BitacoraViewDialog').show()"/>
+                </p:contextMenu>
+            </h:form>
+            <ui:include src="showEventDialog.xhtml"/>
+        </ui:define>
+
+    </ui:composition>
+
+</html>

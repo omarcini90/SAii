@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="CampusViewDlg" widgetVar="CampusViewDialog" modal="true" resizable="false" responsive="true" appendTo="@(body)" header="Campus">
+            <h:form id="CampusViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" columnClasses="ui-grid-col-3, ui-grid-col-9" layout="grid" styleClass="ui-panelgrid-blank" rendered="#{campusController.selected != null}">
+                        <p:outputLabel value="Institución:" />
+                        <h:outputText value="#{campusController.selected.idInstitucion.nombre}"/>                        
+                        <p:outputLabel value="Nombre:"/>
+                        <h:outputText value="#{campusController.selected.nombre}"/>
+                        <p:outputLabel value="Razón Social:"/>
+                        <h:outputText value="#{campusController.selected.razonSocial != null ? campusController.selected.razonSocial : 'Sin especificar'}"/>
+                        <p:outputLabel value="Rector:"/>
+                        <h:outputText value="#{campusController.selected.rector}"/>
+                        <p:outputLabel value="Localidad:"/>
+                        <h:outputText value="#{campusController.selected.idEstado.descripcion}"/>
+                        <p:outputLabel value="Domicilio:"/>
+                        <h:outputText value="#{campusController.selected.domicilio}" />
+                        <p:outputLabel value="Teléfono:"/>
+                        <h:outputText value="#{campusController.selected.telPrincipal}"/>                       
+                        <p:outputLabel value="Activo:"/>
+                        <b:switch  value="#{campusController.selected.activo}" onText="SI" offText="NO" onColor="success" readonly="true"/>
+                        <p:outputLabel value="Actualización:"/>
+                        <h:outputText value="#{campusController.selected.fechaActualizacion}">
+                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm" timeZone="#{defaultsMB.cdmxTimeZone}"/>
+                        </h:outputText>
+                    </p:panelGrid>
+                    <p:panelGrid columns="1" columnClasses="ui-grid-col-12" layout="grid" styleClass="ui-panelgrid-blank" style="align-content: center; text-align: center;">
+                        <p:commandButton value="#{bundle.Close}" onclick="PF('CampusViewDialog').hide();" process="@this" partialSubmit="true"
+                                         icon="fa fa-times" style="width: 100px; height: 40px; border-color: #212223; color: #212223; background-color: #FFFFFF;"/>        
+                    </p:panelGrid>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

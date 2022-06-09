@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:poue="http://primefaces.org/ui/extensions">
+
+    <ui:composition template="/WEB-INF/templates/fullLayoutTemplate.xhtml">
+
+        <ui:define name="title">
+            <h:outputText value="Configuración de correo"></h:outputText>
+        </ui:define>
+
+        <ui:define name="content">
+        
+            <p:dialog id="CorreoDlg" widgetVar="CorreoDialog" modal="true" resizable="false" width="550px" responsive="true" appendTo="@(body)" header="SERVIDOR DE CORREO" visible="true">
+            	<h:form id="CorreoForm"> 
+                    <h:panelGroup id="display">
+                        <p:panelGrid columns="2" columnClasses="ui-grid-col-2, ui-grid-col-10" layout="grid" styleClass="ui-panelgrid-blank">
+                            <p:outputLabel value="Host:" for="host" />
+                            <p:inputText id="host" value="#{mailController.host}" required="true" requiredMessage="Ingrese el nombre del servidor"/>
+
+                            <p:outputLabel value="Puerto:" for="port" />
+                            <p:inputText id="port" value="#{mailController.port}" size="5" maxlength="5" required="true" requiredMessage="Ingrese el número de puerto TCP">
+                            	<p:keyFilter mask="pint"/>
+                            </p:inputText>
+                            
+                            <p:outputLabel value="Nombre:" for="name" />
+                            <p:inputText id="name" value="#{mailController.name}" required="true" requiredMessage="Ingrese el nombre de la cuenta"/>
+                            
+                            <p:outputLabel value="Cuenta:" for="user" />
+                            <p:inputText id="user" value="#{mailController.user}" placeholder="admin@dominio" required="true" requiredMessage="Ingrese la cuenta de correo">
+                            	<p:keyFilter for="user" mask="email" /> 
+                            </p:inputText>
+                                                
+                            <p:outputLabel value="#{bundle.EditCredencialesLabel_password}" for="password" />
+                            <p:password id="password" value="#{mailController.password}" required="true" requiredMessage="Ingrese la contraseña de la cuenta" 
+                                        match="confirmPassword" feedback="true" inline="true"/>
+
+                            <p:outputLabel value="Confirmar:" for="confirmPassword"/>
+                            <p:password id="confirmPassword" value="#{mailController.password}" required="true" requiredMessage="Reingrese la contraseña"/>                            
+                        
+                        	<p:outputLabel value="Notificación de informes:" for="users" />
+                            <p:chips id="users" value="#{mailController.fimpesusers}" placeholder="user@dominio user2@dominio" required="true" requiredMessage="Ingrese los correos para notificaciones"/>
+                        </p:panelGrid>
+                        <p:panelGrid columns="2" columnClasses="ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank" style="align-content: center; text-align: center;">
+                            <p:commandButton id="save" actionListener="#{mailController.save}" value="#{bundle.Save}" update="display,:growl" 
+                                             oncomplete="handleCallback(args, 'CorreoDialog');" icon="fa fa-floppy-o" 
+                                             style="width: 100px; height: 40px; border-color: midnightblue;">
+                            </p:commandButton>
+                            <p:commandButton value="#{bundle.Cancel}" onclick="PF('CorreoDialog').hide();" process="@this" partialSubmit="true"
+                                             icon="fa fa-ban" style="width: 100px; height: 40px; border-color: #212223; color: #212223; background-color: #FFFFFF;"/>        
+                        </p:panelGrid>
+                    </h:panelGroup>
+                    
+                    <p:blockUI block="CorreoDlg" trigger="save">
+            			<p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank">
+                			<h:outputText value="Procesando..."/>
+                    		<h:graphicImage url="/resources/img/loading_infinity.gif" width="55" height="55"/>
+                		</p:panelGrid>
+           			</p:blockUI>
+           			
+           		</h:form>
+            </p:dialog>
+            
+        </ui:define>
+
+    </ui:composition>
+
+</html>

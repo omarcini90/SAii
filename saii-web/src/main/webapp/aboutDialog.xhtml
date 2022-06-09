@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+	<h:form id="AboutForm">
+        <p:dialog id="AboutDlg" widgetVar="AboutDialog" header="#{bundle.AppName}" modal="true" resizable="false" width="600px" height="250px" responsive="true" appendTo="@(body)">
+                <h:panelGroup id="display" >
+                    <p:panelGrid columns="1" columnClasses="ui-grid-col-12" layout="grid" styleClass="ui-panelgrid-blank">
+                        <p:outputPanel deferred="true" style="text-align: justify;" >
+                            <div style="font-size: small"><strong>SAii</strong> es un Sistema de Gestión Estadística que tiene como propósito 
+                                coadyuvar en la planificación de las actividades de cada una de las Instituciones afiliadas, mediante la definición de nuevas estratégias de innovación 
+                                y mejoras en los procesos críticos.
+                                <p></p>
+                                BENEFICIOS:
+                                <ul>
+                                    <li>Confidencialidad y alto nivel de seguridad de la información.</li>
+                                    <p></p>
+                                    <li>Medición del desempeño con base en datos estadísticos de la población.</li>
+                                    <p></p>
+                                    <li>Integración de la información de forma ágil y oportuna.</li>
+                                    <p></p>
+                                    <li>Interfaz fácil e intuitiva con acceso desde cualquier navegador.</li>
+                                    <p></p>
+                                </ul>                        
+                            </div>                       
+                        </p:outputPanel>
+                    </p:panelGrid>
+                    <p:panelGrid columns="1" columnClasses="ui-grid-col-12" layout="grid" styleClass="ui-panelgrid-blank" style="align-content: center; text-align: center;">
+                        <p:commandButton value="#{bundle.Close}" onclick="PF('AboutDialog').hide();" process="@this" partialSubmit="true"
+                                         icon="fa fa-times" style="width: 100px; height: 40px; border-color: #212223; color: #212223; background-color: #FFFFFF;"/>        
+                    </p:panelGrid>
+                </h:panelGroup>            
+       </p:dialog>
+	</h:form>
+
+    </ui:composition>
+
+</html>

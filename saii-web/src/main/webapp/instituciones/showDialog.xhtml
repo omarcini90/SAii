@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="InstitucionesViewDlg" widgetVar="InstitucionesViewDialog" modal="true" resizable="false" responsive="true" appendTo="@(body)" header="Institución">
+            <h:form id="InstitucionesViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" columnClasses="ui-grid-col-3, ui-grid-col-9" layout="grid" styleClass="ui-panelgrid-blank" rendered="#{institucionesController.selected != null}">
+                        <p:outputLabel value="Siglas:"/>
+                        <h:outputText value="#{institucionesController.selected.siglas}"/>                        
+                        <p:outputLabel value="Nombre:"/>
+                        <h:outputText value="#{institucionesController.selected.nombre}"/>                        
+                        <p:outputLabel value="Rector:"/>
+                        <h:outputText value="#{institucionesController.selected.rector}"/>                        
+                        <p:outputLabel value="Fundación:"/>
+                        <h:outputText value="#{institucionesController.selected.fundacion}">
+                                <f:convertDateTime pattern="MM/yyyy" />
+                        </h:outputText>
+                        <p:outputLabel value="Domicilio:"/>
+                        <h:outputText value="#{institucionesController.selected.domicilio}"/>                        
+                        <p:outputLabel value="Teléfono:"/>
+                        <h:outputText value="#{institucionesController.selected.telPrincipal}"/>                        
+                        <p:outputLabel value="Otro Tel.:"/>
+                        <h:outputText value="#{institucionesController.selected.telSecundario != null ? institucionesController.selected.telSecundario : 'Sin especificar'}"/>
+                        <p:outputLabel value="Sitio web:"/>
+                        <h:outputText value="#{institucionesController.selected.sitioWeb != null ? institucionesController.selected.sitioWeb : 'Sin especificar'}"/>                        
+                        <p:outputLabel value="Total de campus:"/>
+                        <h:outputText value="#{institucionesController.selected.totalCampus}"/>                        
+                        <p:outputLabel value="Total de alumnos:"/>
+                        <h:outputText  value="#{institucionesController.selected.totalAlumnos}"/>                        
+                        <p:outputLabel value="Total de programas:"/>
+                        <h:outputText value="#{institucionesController.selected.totalProgramas}"/>                        
+                        <p:outputLabel value="Incorporación a FIMPES:"/>
+                        <h:outputText value="#{institucionesController.selected.fechaFimpes}">
+                                <f:convertDateTime pattern="MM/yyyy" />
+                        </h:outputText>                     
+                        <p:outputLabel value="Status:"/>
+                        <h:outputText value="#{institucionesController.selected.idStatus.descripcion}"/>                        
+                        <p:outputLabel value="Activa:"/>
+                        <b:switch value="#{institucionesController.selected.activa}" onText="SI" offText="NO" onColor="success" readonly="true"/>
+                        <p:outputLabel value="Actualización:"/>
+                        <h:outputText value="#{institucionesController.selected.fechaActualizacion}">
+                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm" timeZone="#{defaultsMB.cdmxTimeZone}"/>
+                        </h:outputText>
+                    </p:panelGrid>
+                    <p:panelGrid columns="1" columnClasses="ui-grid-col-12" layout="grid" styleClass="ui-panelgrid-blank" style="align-content: center; text-align: center;">
+                        <p:commandButton value="#{bundle.Close}" onclick="PF('InstitucionesViewDialog').hide();" process="@this" partialSubmit="true"
+                                         icon="fa fa-times" style="width: 100px; height: 40px; border-color: #212223; color: #212223; background-color: #FFFFFF;"/>        
+                    </p:panelGrid>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

@@ -1,0 +1,178 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/WEB-INF/templates/fullLayoutTemplate.xhtml">
+		
+        <ui:define name="title">
+            <h:outputText value="#{reportesController.reporte}"></h:outputText>
+        </ui:define>
+
+        <ui:define name="content">
+        
+            <ui:include src="criterio.xhtml"/>
+            	
+            	<h:form id="ResultForm">
+            		<p:dataTable id="datalist" widgetVar="datalist" reflow="true" value="#{reportesController.result}" var="item"
+                                 filteredValue="#{reportesController.filteredItems}" 
+                                 lazy="false"
+                                 sortMode="multiple"
+                                 draggableColumns="true"
+                                 resizableColumns="true"
+                                 liveResize="true"
+                                 paginator="true"
+                                 rows="20"
+                                 rowsPerPageTemplate="20,40,60"
+                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
+                                 paginatorPosition="bottom">
+						<f:facet name="header">
+                            <p:outputPanel layout="inline" style=" text-align: center;">
+                                <p:outputLabel value="Filtrar por:"/>
+                                <p:inputText id="globalFilter" onkeyup="PF('datalist').filter();" style="width:150px" placeholder="Texto..."/>
+                                <p:spacer width="20"/>
+                                <p:commandButton id="toggler" type="button" value="Mostrar/Ocultar columnas" style="width: 250px;" icon="ui-icon-calculator" />
+                                <p:columnToggler datasource="datalist" trigger="toggler" />
+                            </p:outputPanel>
+                        </f:facet>
+
+                        <f:facet name="{Exporters}">
+                            <p:commandButton value="Reporte" ajax="false" icon="fa fa-file-excel-o" title="Exportar a Excel" style="width: 80px;">
+                                <p:dataExporter type="xlsx" encoding="UTF-8" target="datalist" fileName="#{reportesController.reporte.concat('_').concat(defaultsMB.fullFormattedDate)}" />
+                            </p:commandButton>
+                        </f:facet>
+                        
+                        <p:column headerText="ID Institución" sortBy="#{item.idInstitucion}" visible="false" exportable="false">
+                            <h:outputText value="#{item.idInstitucion}"/>
+                        </p:column>
+                        <p:column headerText="Nombre de la Institución" filterBy="#{item.nombreInstitucion}" filterMatchMode="contains">
+                            <h:outputText value="#{item.nombreInstitucion}"/>
+                        </p:column>
+                        <p:column headerText="ID Campus" sortBy="#{item.idCampus}" visible="false" exportable="false">
+                            <h:outputText value="#{item.idCampus}"/>
+                        </p:column>
+                        <p:column headerText="Nombre de Campus" filterBy="#{item.nombreCampus}" filterMatchMode="contains">
+                            <h:outputText value="#{item.nombreCampus}"/>
+                        </p:column>
+                        <p:column headerText="Entidad Federativa" filterBy="#{item.entidadFederativa}" filterMatchMode="contains" visible="false">
+                            <h:outputText value="#{item.entidadFederativa}"/>
+                        </p:column>
+                        <p:column headerText="ID Programa" sortBy="#{item.idPrograma}" visible="false" exportable="false">
+                            <h:outputText value="#{item.idPrograma}"/>
+                        </p:column>
+                        <p:column headerText="Nombre del Programa" filterBy="#{item.nombre}" filterMatchMode="contains">
+                            <h:outputText value="#{item.nombre}"/>
+                        </p:column>
+                        <p:column headerText="Total de alumnos inscritos" sortBy="#{item.totalAlumnos}" style="text-align: center;">
+                            <h:outputText value="#{item.totalAlumnos}"/>
+                        </p:column>
+                        <p:column headerText="Nivel de estudios" filterBy="#{item.nivel}" filterMatchMode="contains" visible="false">
+                            <h:outputText value="#{item.nivel}"/>
+                        </p:column>
+                        <p:column headerText="Modalidad" filterBy="#{item.modalidad}" filterMatchMode="contains" visible="false">
+                            <h:outputText value="#{item.modalidad}"/>
+                        </p:column>
+                        <p:column headerText="Temporalidad" filterBy="#{item.temporalidad}" filterMatchMode="contains" visible="false">
+                            <h:outputText value="#{item.temporalidad}"/>
+                        </p:column>
+                        <p:column headerText="Área de conocimiento" filterBy="#{item.areaConocimiento}" filterMatchMode="contains" visible="false">
+                            <h:outputText value="#{item.areaConocimiento}"/>
+                        </p:column>
+                        <p:column headerText="Total de docentes asignados" sortBy="#{item.totalDocentes}" style="text-align: center;">
+                            <h:outputText value="#{item.totalDocentes}"/>
+                        </p:column>
+                        <p:column headerText="Docentes hombres" sortBy="#{item.docentesHombres}" style="text-align: center;" visible="false">
+                            <h:outputText value="#{item.docentesHombres}"/>
+                        </p:column>
+                        <p:column headerText="Docentes mujeres" sortBy="#{item.docentesMujeres}" style="text-align: center;" visible="false">
+                            <h:outputText value="#{item.docentesMujeres}"/>
+                        </p:column>                        
+                        <p:column headerText="Docentes de 30 o menos años de edad" sortBy="#{item.menos30}" style="text-align: center;" visible="false">
+                            <h:outputText value="#{item.menos30}"/>
+                        </p:column>
+                        <p:column headerText="Docentes de 31 a 49 años de edad" sortBy="#{item.entre31y40}" style="text-align: center;" visible="false">
+                            <h:outputText value="#{item.entre31y40}"/>
+                        </p:column>
+                        <p:column headerText="Docentes de 50 o más años de edad" sortBy="#{item.mas50}" style="text-align: center;" visible="false">
+                            <h:outputText value="#{item.mas50}"/>
+                        </p:column>
+                        <p:column headerText="Docentes con discapacidad" sortBy="#{item.discapacidad}" style="text-align: center;" visible="false">
+                            <h:outputText value="#{item.discapacidad}"/>
+                        </p:column>
+                        <p:column headerText="Docentes extranjeros" sortBy="#{item.extranjeros}" style="text-align: center;" visible="false">
+                            <h:outputText value="#{item.extranjeros}"/>
+                        </p:column>
+                        <p:column headerText="Docentes con antigüedad de 0 a 5 años" sortBy="#{item.antiguedad0a5}" style="text-align: center;" visible="false">
+                            <h:outputText value="#{item.antiguedad0a5}"/>
+                        </p:column>
+                        <p:column headerText="Docentes con antigüedad de 6 a 15 años" sortBy="#{item.antiguedad6a15}" style="text-align: center;" visible="false">
+                            <h:outputText value="#{item.antiguedad6a15}"/>
+                        </p:column>
+                        <p:column headerText="Docentes con antigüedad de 16 a 25 años" sortBy="#{item.antiguedad16a25}" style="text-align: center;" visible="false">
+                            <h:outputText value="#{item.antiguedad16a25}"/>
+                        </p:column>
+                        <p:column headerText="Docentes con antigüedad de 26 o más años" sortBy="#{item.antiguedadMas26}" style="text-align: center;" visible="false">
+                            <h:outputText value="#{item.antiguedadMas26}"/>
+                        </p:column>                        
+                        <p:column headerText="Docentes con Doctorado" sortBy="#{item.doctores}" style="text-align: center;">
+                            <h:outputText value="#{item.doctores}"/>
+                        </p:column>
+                        <p:column headerText="Docentes con Maestría" sortBy="#{item.maestros}" style="text-align: center;">
+                            <h:outputText value="#{item.maestros}"/>
+                        </p:column>
+                        <p:column headerText="Docentes con Especialidad" sortBy="#{item.especialistas}" style="text-align: center;">
+                            <h:outputText value="#{item.especialistas}"/>
+                        </p:column>
+                        <p:column headerText="Docentes con Licenciatura" sortBy="#{item.licenciados}" style="text-align: center;">
+                            <h:outputText value="#{item.licenciados}"/>
+                        </p:column>
+                        <p:column headerText="Docentes con otra formación" sortBy="#{item.otraFormacion}" style="text-align: center;">
+                            <h:outputText value="#{item.otraFormacion}"/>
+                        </p:column>
+                        <p:column headerText="Personal de tiempo completo" sortBy="#{item.totalTiempoCompleto}" style="text-align: center;">
+                            <h:outputText value="#{item.totalTiempoCompleto}"/>
+                        </p:column>
+                        <p:column headerText="Tiempo completo hombres" sortBy="#{item.tiempoCompletoHombres}" style="text-align: center;" visible="false">
+                            <h:outputText value="#{item.tiempoCompletoHombres}"/>
+                        </p:column>
+                        <p:column headerText="Tiempo completo mujeres" sortBy="#{item.tiempoCompletoMujeres}" style="text-align: center;" visible="false">
+                            <h:outputText value="#{item.tiempoCompletoMujeres}"/>
+                        </p:column>
+                        <p:column headerText="Personal de medio tiempo" sortBy="#{item.totalMedioTiempo}" style="text-align: center;">
+                            <h:outputText value="#{item.totalMedioTiempo}"/>
+                        </p:column>
+                        <p:column headerText="Medio tiempo hombres" sortBy="#{item.medioTiempoHombres}" style="text-align: center;">
+                            <h:outputText value="#{item.medioTiempoHombres}"/>
+                        </p:column>
+                        <p:column headerText="Medio tiempo mujeres" sortBy="#{item.medioTiempoMujeres}" style="text-align: center;">
+                            <h:outputText value="#{item.medioTiempoMujeres}"/>
+                        </p:column>
+                        <p:column headerText="Docentes que participaron en el S.N.I." sortBy="#{item.participacionSNI}" style="text-align: center;">
+                            <h:outputText value="#{item.participacionSNI}"/>
+                        </p:column>
+                        <p:column headerText="Docentes con formación profesional" sortBy="#{item.formacionProfesional}" style="text-align: center;">
+                            <h:outputText value="#{item.formacionProfesional}"/>
+                        </p:column>
+                        <p:column headerText="Docentes que colaboran en gestión académica" sortBy="#{item.colaboracionAcademica}" style="text-align: center;">
+                            <h:outputText value="#{item.colaboracionAcademica}"/>
+                        </p:column>
+                        <p:column headerText="Docentes en movilidad nacional" sortBy="#{item.movilidadNacional}" style="text-align: center;">
+                            <h:outputText value="#{item.movilidadNacional}"/>
+                        </p:column>
+                        <p:column headerText="Docentes en movilidad internacional" sortBy="#{item.movilidadInternacional}" style="text-align: center;">
+                            <h:outputText value="#{item.movilidadInternacional}"/>
+                        </p:column>
+                        <p:column headerText="Año reportado" sortBy="#{item.anio}" style="text-align: center;">
+                            <h:outputText value="#{item.anio}"/>
+                        </p:column>
+                    </p:dataTable>
+        		</h:form>
+                    
+        </ui:define>
+
+    </ui:composition>
+
+</html>

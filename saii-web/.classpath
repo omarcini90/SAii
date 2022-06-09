@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" output="target/classes" path="src/main/java">
+		<attributes>
+			<attribute name="optional" value="true"/>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry excluding="**" kind="src" output="target/classes" path="src/main/resources">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" output="target/test-classes" path="src/test/java">
+		<attributes>
+			<attribute name="test" value="true"/>
+			<attribute name="optional" value="true"/>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry combineaccessrules="false" kind="src" path="/saii-ejb">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry combineaccessrules="false" kind="src" path="/saii-model">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-11">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.jboss.tools.maven.jdt.ENDORSED_LIB_CLASSPATH_CONTAINER">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.nondependency" value=""/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jst.server.core.container/org.jboss.ide.eclipse.as.core.server.runtime.runtimeTarget/WildFly 14.0 Runtime"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/advancedPersistentLookupLib-1.2.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/campus_0_1.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/carga_indicadores_campus_0_1.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/carga_indicadores_institucion_0_1.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/carga_indicadores_programa_0_1.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/carga_layout_0_1.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/geronimo-stax-api_1.0_spec-1.0.1.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/institucion_0_1.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/jboss-serialization.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/mysql-connector-java-8.0.12.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/poi-3.16-20170419_modified_talend.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/poi-ooxml-3.16-20170419_modified_talend.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/poi-ooxml-schemas-3.16-20170419.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/poi-scratchpad-3.16-20170419.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/programas_0_1.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/routines.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/talendcsv.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/trove.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/xmlbeans-2.6.0.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/carga_layout_update.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/programas_update.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/institucion_update.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/campus_update.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/WEB-INF/lib/jxl-6.0.0.jar"/>
+	<classpathentry kind="output" path="target/classes"/>
+</classpath>

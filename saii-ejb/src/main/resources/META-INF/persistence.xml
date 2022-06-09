@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+    <persistence-unit name="SAiiPersistanceUnit" transaction-type="JTA">
+        <jta-data-source>java:jboss/datasources/SAiiDS</jta-data-source>
+        <class>mx.org.fimpes.saii.model.security.Credenciales</class>
+        <class>mx.org.fimpes.saii.model.security.CredencialesHasMenu</class>
+        <class>mx.org.fimpes.saii.model.security.Menus</class>
+        <class>mx.org.fimpes.saii.model.security.Modulos</class>
+        <class>mx.org.fimpes.saii.model.security.Roles</class>
+        <class>mx.org.fimpes.saii.model.security.Sistemas</class>
+        <class>mx.org.fimpes.saii.model.security.Usuarios</class>
+        <class>mx.org.fimpes.saii.model.security.BitacoraEventos</class>
+        <class>mx.org.fimpes.saii.model.mail.MailConfig</class>
+        <class>mx.org.fimpes.saii.model.core.Acreditadoras</class>
+        <class>mx.org.fimpes.saii.model.core.Afiliaciones</class>
+        <class>mx.org.fimpes.saii.model.core.AreaConocimiento</class>
+        <class>mx.org.fimpes.saii.model.core.Campus</class>
+        <class>mx.org.fimpes.saii.model.core.Ciclos</class>
+        <class>mx.org.fimpes.saii.model.core.Enfoque</class>
+        <class>mx.org.fimpes.saii.model.core.Estados</class>
+        <class>mx.org.fimpes.saii.model.core.Indicadores</class>
+        <class>mx.org.fimpes.saii.model.core.Instituciones</class>
+        <class>mx.org.fimpes.saii.model.core.Modalidad</class>
+        <class>mx.org.fimpes.saii.model.core.NivelAcademico</class>
+        <class>mx.org.fimpes.saii.model.core.PeriodoAcceso</class>
+        <class>mx.org.fimpes.saii.model.core.ProcesoCaptura</class>
+        <class>mx.org.fimpes.saii.model.core.Programas</class>
+        <class>mx.org.fimpes.saii.model.core.RegistroIndicadores</class>
+        <class>mx.org.fimpes.saii.model.core.Seccion</class>
+        <class>mx.org.fimpes.saii.model.core.StatusFimpes</class>
+        <class>mx.org.fimpes.saii.model.core.Temporalidades</class>
+        <class>mx.org.fimpes.saii.model.core.TipoIndicador</class>
+        <class>mx.org.fimpes.saii.model.core.TipoRvoe</class>
+        <class>mx.org.fimpes.saii.model.security.RestablecimientoPassword</class>
+        <exclude-unlisted-classes>true</exclude-unlisted-classes>
+        <properties>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
+            <property name="hibernate.enable_lazy_load_no_trans" value="true"/>
+        </properties>
+    </persistence-unit>
+</persistence>

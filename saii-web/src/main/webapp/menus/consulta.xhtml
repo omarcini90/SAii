@@ -1,0 +1,103 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:poue="http://primefaces.org/ui/extensions">
+
+    <ui:composition template="/WEB-INF/templates/fullLayoutTemplate.xhtml">
+
+        <ui:define name="title">
+            <h:outputText value="#{bundle.ListMenusTitle}"></h:outputText>
+        </ui:define>
+
+        <ui:define name="content">
+            <h:form id="MenusListForm">
+                <p:panel header="#{bundle.ListMenusTitle}">
+                    <p:dataTable id="datalist" widgetVar="datalist" reflow="true" value="#{menusController.items}" var="item"
+                                 selectionMode="single" selection="#{menusController.selected}"
+                                 draggableColumns="true"
+                                 resizableColumns="true"
+                                 liveResize="true"
+                                 paginator="true"
+                                 rowKey="#{item.idMenu}"
+                                 rows="20"
+                                 rowsPerPageTemplate="20,40,60"
+                                 paginatorPosition="bottom">
+                        <p:ajax event="rowSelect"   update="createButton viewButton editButton deleteButton"/>
+                        <p:ajax event="rowUnselect" update="createButton viewButton editButton deleteButton"/>
+
+                        <f:facet name="header">
+                                <p:commandButton id="createButton" value="#{bundle.Create}" icon="fa fa-plus" style="margin-right:10px; width: 100px; height: 40px; border-color: midnightblue;" actionListener="#{menusController.prepareCreate}" update=":MenusCreateForm" oncomplete="PF('MenusCreateDialog').show()"/>
+                        </f:facet>
+
+                        <p:column headerText="#{bundle.ListMenusTitle_idMenu}" visible="false">
+                            <h:outputText value="#{item.idMenu}"/>
+                        </p:column>                        
+                        <p:column headerText="#{bundle.ListMenusTitle_etiquetaMenu}">
+                            <h:outputText value="#{item.etiquetaMenu}"/>
+                        </p:column>
+                        <p:column headerText="#{bundle.ListMenusTitle_icono}">
+                            <h:outputLink class="#{item.icono}" disabled="true"/>
+                        </p:column>
+                        <p:column headerText="#{bundle.ListMenusTitle_descripcion}" visible="false">
+                            <h:outputText value="#{item.descripcion}"/>
+                        </p:column>
+                        <p:column headerText="#{bundle.ListMenusTitle_url}">
+                            <h:outputText value="#{item.url}"/>
+                        </p:column>                        
+                        <p:column headerText="#{bundle.ListMenusTitle_idModulo}">
+                            <h:outputText value="#{item.idModulo.etiquetaMenu}"/>
+                        </p:column>
+                        <p:column headerText="#{bundle.ListMenusTitle_idMenuSuperior}">
+                            <h:outputText value="#{item.idMenuSuperior.etiquetaMenu}"/>
+                        </p:column>
+                        <p:column headerText="#{bundle.ListMenusTitle_activo}">
+                            <b:switch value="#{item.activo}" onText="SI" offText="NO" onColor="success" readonly="true"/>
+                        </p:column>
+                        <p:column headerText="Actualización" visible="false">
+                            <h:outputText value="#{item.fechaModificacion}">
+                                <f:convertDateTime pattern="dd/MM/yyyy" />
+                            </h:outputText>
+                        </p:column> 
+                        <p:column headerText="Funciones">
+                            <p:commandLink id="viewButton" title="#{bundle.View}" styleClass="fa fa-search" style="float:left;margin-right:10px" update=":MenusViewForm" oncomplete="PF('MenusViewDialog').show()">
+                                <f:setPropertyActionListener value="#{item}" target="#{menusController.selected}" />
+                            </p:commandLink> 
+                            <p:commandLink id="editButton" title="#{bundle.Edit}" styleClass="fa fa-pencil-square-o" style="float:left;margin-right:10px" update=":MenusEditForm" oncomplete="PF('MenusEditDialog').show()">
+                                <f:setPropertyActionListener value="#{item}" target="#{menusController.selected}" />
+                            </p:commandLink>
+                            <p:commandLink id="deleteButton" title="#{bundle.Delete}" styleClass="fa fa-trash-o" style="float:left;margin-right:10px" actionListener="#{menusController.destroy}" update=":growl,datalist">
+                                <p:confirm header="¿Desea eliminar el registro?" message="Una vez eliminado no podrá recuperarlo" icon="fa fa-exclamation-triangle" />
+                                <f:setPropertyActionListener value="#{item}" target="#{menusController.selected}" />
+                            </p:commandLink>
+                        </p:column>
+                    </p:dataTable>
+                </p:panel>
+
+                <p:contextMenu for="datalist">
+                    <p:menuitem value="#{bundle.View}" update=":MenusViewForm" icon="fa fa-search" oncomplete="PF('MenusViewDialog').show()"/>
+                    <p:menuitem value="#{bundle.Edit}" update=":MenusEditForm" icon="fa fa-pencil-square-o" oncomplete="PF('MenusEditDialog').show()"/>
+                    <p:menuitem value="#{bundle.Delete}" update=":growl,datalist" icon="fa fa-trash-o" actionListener="#{menusController.destroy}">
+                        <p:confirm header="¿Desea eliminar el registro?" message="Una vez eliminado no podrá recuperarlo" icon="fa fa-exclamation-triangle" />
+                    </p:menuitem>
+                    <p:separator />
+                    <p:menuitem value="#{bundle.Create}" icon="fa fa-plus" actionListener="#{menusController.prepareCreate}" update=":MenusCreateForm" oncomplete="PF('MenusCreateDialog').show()"/>
+                </p:contextMenu>
+
+                <p:confirmDialog id="confirmDialog" global="true" showEffect="fade" hideEffect="fade" closeOnEscape="true">
+                    <p:commandButton value="SI" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                    <p:commandButton value="NO" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                </p:confirmDialog>
+
+            </h:form>
+            <ui:include src="addDialog.xhtml"/>
+            <ui:include src="editDialog.xhtml"/>
+            <ui:include src="showDialog.xhtml"/>     
+        </ui:define>
+    </ui:composition>
+
+</html>

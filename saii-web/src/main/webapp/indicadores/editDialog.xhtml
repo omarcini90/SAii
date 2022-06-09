@@ -1,0 +1,99 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:poue="http://primefaces.org/ui/extensions">
+
+    <ui:composition>
+
+        <p:dialog id="IndicadoresEditDlg" widgetVar="IndicadoresEditDialog" modal="true" resizable="false" width="600px" height="630px" responsive="true" appendTo="@(body)" header="Editar Indicador">
+            <h:form id="IndicadoresEditForm">
+                <h:panelGroup id="display">
+                	<p:panelGrid columns="1" columnClasses="ui-grid-col-12" layout="grid" styleClass="ui-panelgrid-blank" style="align-content: center; text-align: center;">
+                		<b:alert severity="warning"><strong>Atención! </strong>Si reclasifica y/o cambia el propósito inicial del indicador, afectará la generación de reportes.</b:alert>
+                	</p:panelGrid>                	
+                    <p:panelGrid columns="2" columnClasses="ui-grid-col-3, ui-grid-col-9" layout="grid" styleClass="ui-panelgrid-blank" rendered="#{indicadoresController.selected != null}">
+                        <p:outputLabel value="Tipo de dato:" for="dato" />
+                        <p:selectOneMenu id="dato" value="#{indicadoresController.selected.tipoDato}" filter="true" filterMatchMode="contains"
+                                         required="true" requiredMessage="Seleccione el tipo de dato del indicador" disabled="true">
+                            <p:ajax process="@this" update="@form" listener="#{indicadoresController.changeTipoDato}" />
+                            <f:selectItem itemLabel="NUMÉRICO" itemValue="NUMERICO"/>
+                            <f:selectItem itemLabel="CONDICIONAL (SI/NO)" itemValue="BOLEANO"/>
+                            <f:selectItem itemLabel="TEXTO" itemValue="TEXTO"/>
+                        </p:selectOneMenu>
+                        
+                        <p:outputLabel id="operadorLabel" value="¿Es Subindicador?" rendered="#{indicadoresController.tipoDatoNumerico}"/>
+                        <b:switch id="operador" value="#{indicadoresController.selected.esOperador}" rendered="#{indicadoresController.tipoDatoNumerico}" title="¿Forma parte de una sumatoria?"
+                                  onText="SI" offText="NO" onColor="success" process="@this" update="@form"/>                        
+
+                        <p:outputLabel id="sumaLabel" value="Indicador de TOTAL:" for="suma" rendered="#{indicadoresController.tipoDatoNumerico and indicadoresController.selected.esOperador}"/>
+                        <p:selectOneMenu id="suma" value="#{indicadoresController.selected.idIndicadorTotal}" rendered="#{indicadoresController.tipoDatoNumerico and indicadoresController.selected.esOperador}" 
+                                         filter="true" filterMatchMode="contains" required="#{indicadoresController.tipoDatoNumerico and indicadoresController.selected.esOperador}" 
+                                         requiredMessage="Seleccione el indicador de totales">
+                            <f:selectItem itemLabel="Seleccionar..." itemValue="#{null}" noSelectionOption="true" />
+                            <f:selectItems value="#{indicadoresController.allTotals}"
+                                           var="indicador"
+                                           itemValue="#{indicador.idIndicador}"/>
+                        </p:selectOneMenu>
+                        
+                        <p:outputLabel value="Etiqueta:" for="etiqueta"/>
+                        <p:inputText id="etiqueta" value="#{indicadoresController.selected.etiqueta}" title="Nombre del indicador" 
+                                     required="true" requiredMessage="Ingrese el nombre del indicador" maxlength="250"/>
+
+                        <p:outputLabel value="Descripción:" for="descripcion"/>
+                        <p:inputText id="descripcion" value="#{indicadoresController.selected.descripcion}" title="Drescripción del indicador" 
+                                     required="true" requiredMessage="Ingrese la descripción del indicador" maxlength="250"/>
+
+                        <p:outputLabel value="Explicación:" for="explicacion"/>
+                        <p:inputTextarea id="explicacion" value="#{indicadoresController.selected.explicacion}" autoResize="true" 
+                                         placeholder="Ingrese una breve explicación" rows="4" cols="60"/>
+
+                        <p:outputLabel value="Indicador de:" for="tipo" />
+                        <p:selectOneMenu id="tipo" value="#{indicadoresController.selected.idTipo}" filter="true" filterMatchMode="contains"
+                                         required="true" requiredMessage="Seleccione el tipo de indicador">
+                            <p:ajax process="@this" update="seccion" listener="#{indicadoresController.changeSeccion}" />
+                            <f:selectItems value="#{indicadoresController.tiposIndicadores}" 
+                                           var="tipo"
+                                           itemValue="#{tipo}"/>
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="Sección:" for="seccion"/>
+                        <p:selectOneMenu id="seccion" value="#{indicadoresController.selected.idSeccion}" filter="true" filterMatchMode="contains"
+                                         required="true" requiredMessage="Seleccione la sección">
+                            <f:selectItems value="#{indicadoresController.secciones}"
+                                           var="seccion"
+                                           itemValue="#{seccion}"/>
+                        </p:selectOneMenu>
+                        
+                        <p:outputLabel value="¿Es requerido?"/>
+                        <b:switch id="requerido" value="#{indicadoresController.selected.requerido}" onText="SI" offText="NO" onColor="success"/>
+                        
+                        <p:outputLabel value="Activar:"/>
+                        <b:switch  id="activo" value="#{indicadoresController.selected.activo}" onText="SI" offText="NO" onColor="success"/>
+                    </p:panelGrid>
+                    <p:panelGrid columns="2" columnClasses="ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank" style="align-content: center; text-align: center;">                               
+                        <p:commandButton id="save" actionListener="#{indicadoresController.update}" value="#{bundle.Save}" update="display,:IndicadoresListForm:datalist,:growl"
+                                         oncomplete="handleCallback(args, 'IndicadoresEditDialog');" icon="fa fa-floppy-o" 
+                                         style="width: 100px; height: 40px; border-color: midnightblue;"/>
+                        <p:commandButton value="#{bundle.Cancel}" onclick="PF('IndicadoresEditDialog').hide();" process="@this" partialSubmit="true"
+                                         icon="fa fa-ban" style="width: 100px; height: 40px; border-color: #212223; color: #212223; background-color: #FFFFFF;"/>        
+                    </p:panelGrid>
+                </h:panelGroup>
+                
+                <p:blockUI block="IndicadoresEditDlg" trigger="save">
+                    <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank">
+                        <h:outputText value="Procesando..."/>
+                        <h:graphicImage url="/resources/img/loading_infinity.gif" width="55" height="55"/>
+                    </p:panelGrid>
+                </p:blockUI>
+                
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

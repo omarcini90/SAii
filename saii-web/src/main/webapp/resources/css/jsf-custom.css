@@ -1,0 +1,44 @@
+.ui-widget {
+    font-size: 12px !important;
+}
+.ui-layout-north {
+    z-index: 20 !important;
+    overflow: visible !important;;
+}
+.ui-layout-north .ui-layout-unit-content {
+    overflow: visible !important;
+}
+.ui-widget-header {
+    text-align: center;
+    text-transform: uppercase;
+}
+.ui-analog-clock {
+    width: 50px !important;
+    height: 50px !important;
+}
+.ui-fieldset, .ui-fieldset .ui-fieldset-legend {
+    font-size: 12px;
+}
+.repeat_horizontally {
+    margin: 1px;
+    overflow: auto;
+    float: right;
+}
+.center-inline-childs {
+	text-align: center;
+}
+.center-block-itself{
+	width: 600px;   /* change accordingly to component */
+	margin: 0 auto;
+}
+.button {
+	display: block;
+	width: 200px;
+	height: 25px;
+	background: #3F3787;
+	padding: 10px;
+	text-align: center;
+	border-radius: 5px;
+	color: white;
+	font-weight: bold;
+}

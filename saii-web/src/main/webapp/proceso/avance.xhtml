@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:b="http://bootsfaces.net/ui"
+	xmlns:poue="http://primefaces.org/ui/extensions">
+
+<ui:composition>
+	
+	<p:panel id="panelAvance" header="AVANCE">
+		<f:facet name="actions">
+			<p:commandButton value="Finalizar" title="#{procesoController.selected.completado ? 'El proceso ya ha sido completado' : 'Disponible al Administrador, al completar los indicadores requeridos*'}" 
+			                icon="fa fa-paper-plane" style="width: 160px; height: 40px; border-color: forestgreen;"  
+            				process="@this" actionListener="#{procesoController.finishProcess}" update="@form @form:tabProcesos:datalist :growl" 
+            				onstart="PF('statusDialog').show();" oncomplete="PF('statusDialog').hide();" disabled="#{not procesoController.completado}">
+            		<p:confirm header="Finalizar proceso" message="Ya no podrá modificar los indicadores ¿Desea finalizar el proceso de captura y enviar el informe?" icon="fa fa-exclamation-triangle" />
+            </p:commandButton>
+		</f:facet>
+		<p:dataTable id="datalist" reflow="true" value="#{procesoController.avanceSeccion}"
+			var="item" draggableColumns="true" resizableColumns="true" liveResize="true" rowKey="#{item.idSeccion}">
+			
+			<p:column headerText="ID" sortBy="#{item.idSeccion}" style="text-align: center;">
+				<h:outputText value="#{item.idSeccion}" />
+			</p:column>			
+			<p:column headerText="Sección">
+				<h:outputText value="#{item.descripcion}" />
+			</p:column>
+			<p:column headerText="Tipo de indicador" sortBy="#{item.idTipo.descripcion}">
+				<h:outputText value="#{item.idTipo.descripcion}" />
+			</p:column>
+			<p:column headerText="Totales *" sortBy="#{item.totalIndicadoresRequeridos}" style="text-align: center;">
+				<h:outputText value="#{item.totalIndicadoresRequeridos}" style="font-weight: bold;" />
+			</p:column>
+			<p:column headerText="Completados" sortBy="#{item.totalIndicadoresCompletados}" style="text-align: center;">
+				<h:outputText value="#{item.totalIndicadoresCompletados}" style="#{(item.totalIndicadoresCompletados != item.totalIndicadoresRequeridos) ? 'font-weight: bold; color: darkred;' : '' }"/>
+			</p:column>
+			<p:column headerText="Avance">
+				 <b:progressBar value="#{defaultsMB.toString((item.totalIndicadoresCompletados * 100)/item.totalIndicadoresRequeridos)}" min="0" max="100" 
+				 look="#{((item.totalIndicadoresCompletados * 100)/item.totalIndicadoresRequeridos) lt 100 ? 'warning' : 'success'}"
+				 animated="#{((item.totalIndicadoresCompletados * 100)/item.totalIndicadoresRequeridos) lt 100}"/>
+			</p:column>
+		</p:dataTable>
+	</p:panel>
+
+</ui:composition>
+
+</html>

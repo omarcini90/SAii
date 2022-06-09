@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:panelGrid layout="grid" columns="1" columnClasses="ui-grid-col-12" styleClass="ui-panelgrid-blank" 
+                     style="text-align:center; background-color: midnightblue;">
+
+            <p:outputPanel layout="inline">
+                <h:form>
+                    <h:outputLink target="_blank" value="https://www.google.com.mx/maps/place/Fimpes+A.C./@19.4279962,-99.1742337,16z/data=!4m7!1m4!3m3!1s0x85d1ff4b1e60ed23:0xa77c40b8006f3adf!2sFimpes+A.C.!3b1!3m1!1s0x85d1ff4b1e60ed23:0xa77c40b8006f3adf">
+                        <h:outputText style="color: white;" value="Río Guadalquivir No. 50, 4to. piso, Col. Cuauhtémoc, Del. Cuauhtémoc, C.P. 06500, Ciudad de México. Tel. +52(55)5514-5514."/>
+                    </h:outputLink>
+                    <h:outputText style="color: white;" value=" | "/>
+                    <p:commandLink onclick="PF('PrivacyDialog').show();" process="@this">
+                        <h:outputText style="color: white;" value="Aviso de Privacidad"/>
+                    </p:commandLink>
+                </h:form>
+            </p:outputPanel>
+            <h:outputText style="color: white;" value="&copy; 2018 FIMPES. Algunos derechos reservados."/>
+
+        </p:panelGrid>
+
+    </ui:composition>
+
+</html>

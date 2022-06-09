@@ -1,0 +1,112 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:poue="http://primefaces.org/ui/extensions"
+	xmlns:b="http://bootsfaces.net/ui">
+
+<ui:composition template="/WEB-INF/templates/fullLayoutTemplate.xhtml">
+
+	<ui:define name="title">
+		<h:outputText value="#{bundle.ListCredencialesTitle}"></h:outputText>
+	</ui:define>
+
+	<ui:define name="content">
+
+		<h:form id="PermissionsForm">
+			<p:panel id="display" header="Privilegios de #{credencialesController.selected.usuario}">
+				<p:dataTable id="dataPermissions" value="#{credencialesController.permissions}" var="permission"
+					paginator="true" rows="10" paginatorPosition="bottom"
+					editable="true" widgetVar="cellPermissions" reflow="true"
+					emptyMessage="No tiene privilegios asignados"
+					style="width: 600px; margin: 0 auto;">
+
+					<p:ajax event="rowEdit" listener="#{credencialesController.onRowEdit}" update=":growl" />
+					<p:ajax event="rowEditCancel" listener="#{credencialesController.onRowCancel}" update=":growl" />
+
+					<f:facet name="header">
+						<p:commandLink id="backButton"
+							action="#{credencialesController.showUsers}"
+							styleClass="ui-icon ui-icon-arrowreturnthick-1-w" />
+					</f:facet>
+
+					<p:column headerText="Menu">
+						<h:outputText value="#{permission.menus.etiquetaMenu}" />
+					</p:column>
+
+					<p:column headerText="Control total" style="text-align: center">
+						<h:outputLink class="fa fa-check-circle-o fa-2x" style="color: forestgreen" disabled="true" />
+						<p:cellEditor rendered="false">
+							<f:facet name="output">
+								<b:switch value="#{permission.consultar}" onText="SI" offText="NO" onColor="success" disabled="true" />
+							</f:facet>
+							<f:facet name="input">
+								<b:switch value="#{permission.consultar}" onText="SI" offText="NO" onColor="success" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+					<p:column headerText="Imprimir" style="text-align: center" rendered="false">
+						<p:cellEditor>
+							<f:facet name="output">
+								<b:switch value="#{permission.imprimir}" onText="SI" offText="NO" onColor="success" disabled="true" />
+							</f:facet>
+							<f:facet name="input">
+								<b:switch value="#{permission.imprimir}" onText="SI" offText="NO" onColor="success" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+					<p:column headerText="Crear" style="text-align: center" rendered="false">
+						<p:cellEditor>
+							<f:facet name="output">
+								<b:switch value="#{permission.crear}" onText="SI" offText="NO" onColor="success" disabled="true" />
+							</f:facet>
+							<f:facet name="input">
+								<b:switch value="#{permission.crear}" onText="SI" offText="NO" onColor="success" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+					<p:column headerText="Editar" style="text-align: center" rendered="false">
+						<p:cellEditor>
+							<f:facet name="output">
+								<b:switch value="#{permission.editar}" onText="SI" offText="NO" onColor="success" disabled="true" />
+							</f:facet>
+							<f:facet name="input">
+								<b:switch value="#{permission.editar}" onText="SI" offText="NO" onColor="success" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+					<p:column headerText="Eliminar" style="text-align: center" rendered="false">
+						<p:cellEditor>
+							<f:facet name="output">
+								<b:switch value="#{permission.eliminar}" onText="SI" offText="NO" onColor="success" disabled="true" />
+							</f:facet>
+							<f:facet name="input">
+								<b:switch value="#{permission.eliminar}" onText="SI" offText="NO" onColor="success" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+					<p:column headerText="Funciones" style="text-align: center" rendered="false">
+						<p:rowEditor editTitle="#{bundle.Edit}" cancelTitle="#{bundle.Cancel}" />
+					</p:column>
+				</p:dataTable>
+
+				<p:contextMenu for="dataPermissions" widgetVar="cMenu" rendered="false">
+					<p:menuitem value="Editar" icon="ui-icon-key" onclick="PF('cellPermissions').showCellEditor(); return false;" />
+					<p:menuitem value="Cerrar" icon="ui-icon-close" onclick="PF('cMenu').hide()" />
+				</p:contextMenu>
+			</p:panel>
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>
+
+</html>

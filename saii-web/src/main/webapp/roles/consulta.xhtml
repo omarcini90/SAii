@@ -1,0 +1,89 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:poue="http://primefaces.org/ui/extensions">
+
+    <ui:composition template="/WEB-INF/templates/fullLayoutTemplate.xhtml">
+
+        <ui:define name="title">
+            <h:outputText value="#{bundle.ListRolesTitle}"></h:outputText>
+        </ui:define>
+
+        <ui:define name="content">
+            <h:form id="RolesListForm">
+                <p:panel header="#{bundle.ListRolesTitle}">
+                    <p:dataTable id="datalist" widgetVar="datalist" reflow="true" value="#{rolesController.items}" var="item"
+                                 selectionMode="single" selection="#{rolesController.selected}"
+                                 draggableColumns="true"
+                                 resizableColumns="true"
+                                 liveResize="true"
+                                 paginator="true"
+                                 rowKey="#{item.idRol}"
+                                 rows="20"
+                                 rowsPerPageTemplate="20,40,60"
+                                 paginatorPosition="bottom">
+                        <p:ajax event="rowSelect" update="viewButton editButton menuButton deleteButton"/>
+
+                        <f:facet name="header">
+                                <p:commandButton id="createButton" value="#{bundle.Create}" icon="fa fa-plus" style="margin-right:10px; width: 100px; height: 40px; border-color: midnightblue;" actionListener="#{rolesController.prepareCreate}" update=":RolesCreateForm" oncomplete="PF('RolesCreateDialog').show()"/>
+                        </f:facet>
+
+                        <p:column headerText="#{bundle.ListRolesTitle_rol}">
+                            <h:outputText value="#{item.rol}"/>
+                        </p:column>
+                        <p:column headerText="#{bundle.ListRolesTitle_descripcion}">
+                            <h:outputText value="#{item.descripcion}"/>
+                        </p:column>
+                        <p:column headerText="#{bundle.ListRolesTitle_fechaModificacion}" rendered="false">
+                            <h:outputText value="#{item.fechaModificacion}">
+                                <f:convertDateTime pattern="dd/MM/yyyy" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Funciones">
+                            <p:commandLink id="viewButton" title="#{bundle.View}" styleClass="fa fa-search" style="float:left;margin-right:10px" update=":RolesViewForm" oncomplete="PF('RolesViewDialog').show()">
+                                <f:setPropertyActionListener value="#{item}" target="#{rolesController.selected}" />
+                            </p:commandLink> 
+                            <p:commandLink id="editButton" title="#{bundle.Edit}" styleClass="fa fa-pencil-square-o" style="float:left;margin-right:10px" 
+                                           update=":RolesEditForm" oncomplete="PF('RolesEditDialog').show()" disabled="#{not rolesController.isAbleToEdit(item)}">
+                                <f:setPropertyActionListener value="#{item}" target="#{rolesController.selected}" />
+                            </p:commandLink>
+                            <p:commandLink id="menuButton" title="Privilegios" styleClass="fa fa-key" style="float:left;margin-right:10px" actionListener="#{rolesController.showMenus(item)}" update=":RolesMenuDlg" oncomplete="PF('RolesMenuDialog').show()"/>
+                            <p:commandLink id="deleteButton" title="#{bundle.Delete}" styleClass="fa fa-trash-o" style="float:left;margin-right:10px" 
+                                           actionListener="#{rolesController.destroy}" update=":growl,datalist" disabled="#{not rolesController.isAbleToRemove(item)}">
+                                <p:confirm header="¿Desea eliminar el registro?" message="Una vez eliminado no podrá recuperarlo" icon="fa fa-exclamation-triangle" />
+                                <f:setPropertyActionListener value="#{item}" target="#{rolesController.selected}" />
+                            </p:commandLink>
+                        </p:column>
+                    </p:dataTable>
+                </p:panel>
+
+                <p:contextMenu for="datalist">
+                    <p:menuitem value="#{bundle.View}" update=":RolesViewForm" icon="fa fa-search" oncomplete="PF('RolesViewDialog').show()"/>
+                    <p:menuitem value="#{bundle.Edit}" update=":RolesEditForm" icon="fa fa-pencil-square-o" oncomplete="PF('RolesEditDialog').show()"/>
+                    <p:menuitem value="Privilegios" actionListener="#{rolesController.showMenus(null)}" update=":RolesMenuDlg" icon="fa fa-key" oncomplete="PF('RolesMenuDialog').show()"/>
+                    <p:menuitem value="#{bundle.Delete}" update=":growl,datalist" icon="fa fa-trash-o" actionListener="#{rolesController.destroy}">
+                        <p:confirm header="¿Desea eliminar el registro?" message="Una vez eliminado no podrá recuperarlo" icon="fa fa-exclamation-triangle" />
+                    </p:menuitem>
+                    <p:separator />
+                    <p:menuitem value="#{bundle.Create}" icon="fa fa-plus" actionListener="#{rolesController.prepareCreate}" update=":RolesCreateForm" oncomplete="PF('RolesCreateDialog').show()"/>
+                </p:contextMenu>
+
+                <p:confirmDialog id="confirmDialog" global="true" showEffect="fade" hideEffect="fade" closeOnEscape="true">
+                    <p:commandButton value="SI" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                    <p:commandButton value="NO" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                </p:confirmDialog>
+
+            </h:form>
+            <ui:include src="addDialog.xhtml"/>
+            <ui:include src="editDialog.xhtml"/>
+            <ui:include src="menuDialog.xhtml"/>
+            <ui:include src="showDialog.xhtml"/>
+        </ui:define>
+
+    </ui:composition>
+
+</html>

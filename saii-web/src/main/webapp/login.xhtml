@@ -1,0 +1,131 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:poue="http://primefaces.org/ui/extensions">
+    <!-- xmlns:jsf="http://xmlns.jcp.org/jsf"
+         xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+    -->
+
+    <f:view>
+
+        <h:head id="head">
+            <f:facet name="first">
+                <link rel="icon" type="image/x-icon" href="favicon.ico" />
+                <title>SAii - Inicio de sesión</title>
+                <h:outputScript library="primefaces" name="jquery/jquery.js" />
+                <h:outputScript name="/js/jsf-custom.js"/>  
+                <h:outputStylesheet name="/css/jsf-custom.css"/>
+            </f:facet>
+        </h:head>
+
+        <h:body>
+
+            <poue:tooltip global="true" myPosition="left center" atPosition="right center" hideDelay="1"/><!-- Tooltip style -->
+
+            <div class="ui-fluid">
+                
+                <p:panel id="panelLogin" style="background-image: url('resources/img/bk_fimpes.jpg'); background-repeat: no-repeat; background-size: auto; background-position: initial; height: 100vh; align-content: center; margin:0; padding: 0; color: lightgrey; border: none;">
+                    <p:dialog id="loginDialog" header="Sistema Analítico de Información de Instituciones" visible="true" widgetVar="loginDialog" resizable="false" responsive="true" closable="false">
+                        <h:form id="loginForm" prependId="false" onsubmit="action = 'j_security_check';">
+                            <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank" columnClasses="ui-grid-col-6">
+                                <f:facet name="header">
+                                    <h:graphicImage url="/resources/img/fimpes_brown.png" />
+                                </f:facet>
+                                <p:row>
+                                    <p:column>
+                                        <h:outputLabel for="j_username" value="Usuario:" />
+                                    </p:column>
+                                    <p:column>
+                                        <p:inputText id="j_username" placeholder="Ingrese su usuario" required="true" requiredMessage="Ingrese su usuario"/>
+                                    </p:column>
+                                </p:row>
+                                <p:row>
+                                    <p:column>
+                                        <h:outputLabel for="j_password" value="Contraseña" />
+                                    </p:column>
+                                    <p:column>
+                                        <p:password id="j_password" placeholder="Ingrese su contraseña" required="true" requiredMessage="Ingrese su contraseña"/>
+                                    </p:column>
+                                </p:row>                                
+                            </p:panelGrid>
+                            <p:panelGrid columns="1" columnClasses="ui-grid-col-12" layout="grid" styleClass="ui-panelgrid-blank">
+                                <p:commandButton id="submit" value="Entrar" ajax="false" onclick="PF('statusDialog').show();" icon="fa fa-sign-in" style="width: 100px; height: 40px; float:right !important; margin:0px 0px 3px 0px;
+                                                 border-color: midnightblue; color: midnightblue; background-color: #FFFFFF;"/>                                    
+                            </p:panelGrid>                            
+                        </h:form>
+                        
+                        <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank">
+                            <h:form id="formRecovery">
+                                <p:fieldset id="fieldsetRecovery" widgetVar="fieldsetRecovery" legend="Olvidé mi contraseña" toggleable="true" collapsed="true">
+                                    <div class="ui-g">
+                                        <div class="ui-g-12">
+                                            <div class="ui-inputgroup">
+                                                <span class="ui-inputgroup-addon"><i class="fa fa-envelope"></i></span>
+                                                <p:inputText id="mail" value="#{passwordRecoveryMB.email}" placeholder="ingrese su correo" required="true" 
+                                                             requiredMessage="Ingrese el email que tiene registrado">
+                                                    <p:keyFilter for="mail" mask="email" /> 
+                                                </p:inputText>
+                                                <b:commandButton id="recovery" value="Recuperar" look="success" icon="send" actionListener="#{passwordRecoveryMB.recovery}" 
+                                                			update="@form :growl" onclick="PF('statusDialog').show();" oncomplete="PF('statusDialog').hide();" /> 
+                                            </div>
+                                        </div>
+                                    </div>
+                                </p:fieldset>           					
+                            </h:form>
+                        </p:panelGrid>                        
+                    </p:dialog>
+
+                    <h:form>
+                        <p:contextMenu for="panelLogin">
+                            <p:menuitem value="Aviso de privacidad" icon="fa fa-shield" onclick="PF('PrivacyDialog').show();" process="@this"/>
+                            <p:menuitem value="Acerca de" icon="fa fa-window-maximize" onclick="PF('AboutDialog').show();" process="@this"/>
+                        </p:contextMenu>
+                    </h:form>
+
+                </p:panel>
+
+                <ui:include src="/statusDialog.xhtml"/>
+                <ui:include src="/aboutDialog.xhtml"/>
+                <ui:include src="/privacyDialog.xhtml"/>
+
+                <div id="j_idt24" class="ui-panelgrid ui-widget ui-panelgrid-blank" style="text-align:center; background-color: midnightblue;">
+                    <div id="j_idt24_content" class="ui-panelgrid-content ui-widget-content ui-grid ui-grid-responsive">
+                        <div class="ui-grid-row">
+                            <div class="ui-panelgrid-cell ui-grid-col-12">
+                                <a href="https://www.google.com.mx/maps/place/Fimpes+A.C./@19.4279962,-99.1742337,16z/data=!4m7!1m4!3m3!1s0x85d1ff4b1e60ed23:0xa77c40b8006f3adf!2sFimpes+A.C.!3b1!3m1!1s0x85d1ff4b1e60ed23:0xa77c40b8006f3adf" target="_blank">
+                                    <span style="color: white;">Río Guadalquivir No. 50, 4to. piso, Col. Cuauhtémoc, Del. Cuauhtémoc, C.P. 06500, Ciudad de México. Tel. +52(55)5514-5514.</span></a>
+                            </div>
+                        </div>
+                        <div class="ui-grid-row">
+                            <div class="ui-panelgrid-cell ui-grid-col-12">
+                                <h:form>
+                                    <p:commandLink onclick="PF('PrivacyDialog').show();">
+                                        <h:outputText style="color: white;" value="Aviso de Privacidad"/>
+                                    </p:commandLink>
+                                </h:form>
+                            </div>
+                        </div>
+                        <div class="ui-grid-row">
+                            <div class="ui-panelgrid-cell ui-grid-col-12">
+                                <span style="color: white;">© 2018 FIMPES. Algunos derechos reservados.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            
+            <p:growl id="growl" widgetVar="growl" life="9000" showDetail="true">
+                <p:autoUpdate/>
+            </p:growl>
+
+        </h:body>
+    </f:view>
+
+	<!-- Copyright© www.ula.edu.mx | Developed by omar.josue@gmail.com -->
+</html>

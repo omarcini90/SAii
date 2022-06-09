@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:poue="http://primefaces.org/ui/extensions"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:panelGrid layout="grid" columns="2" columnClasses="ui-grid-col-10 ui-grid-col-2" styleClass="ui-panelgrid-blank">
+            <p:graphicImage url="/resources/img/header_999x98.png" alt="FIMPES - SAii" />          
+            <p:panelGrid layout="grid" columns="1" style="text-align: right;" styleClass="ui-panelgrid-blank">
+                <h:outputText value="#{loginMB.authenticatedUser.idInstitucion.siglas}" style="font-size: large; font-weight: bold; color: midnightblue;"/>
+                <p:outputLabel value="#{loginMB.fullName}" style="font-weight: bold;" />
+                <p:outputPanel layout="inline">
+                    <p:repeat var="rol" value="#{loginMB.roles}" >
+                        <h:outputText value="#{rol.descripcion}, " style="font-weight: bold; color: midnightblue;"/>
+                    </p:repeat>
+                </p:outputPanel>
+                <h:outputText value="Su sesión expira en: " style="font-size: x-small;" />
+                
+                <ui:include src="/idleMonitor.xhtml"/>
+
+            </p:panelGrid>
+        </p:panelGrid>
+        <p:panelGrid layout="grid" columns="1" columnClasses="ui-grid-col-12" styleClass="ui-panelgrid-blank">
+            <h:form id="menuForm">
+                <p:menubar model="#{menuMB.menuModel}"  />
+            </h:form>
+        </p:panelGrid>
+
+    </ui:composition>
+
+</html>

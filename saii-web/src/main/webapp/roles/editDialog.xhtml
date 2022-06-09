@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:poue="http://primefaces.org/ui/extensions">
+
+    <ui:composition>
+
+        <p:dialog id="RolesEditDlg" widgetVar="RolesEditDialog" modal="true" resizable="false" width="450px" height="150px" responsive="true" appendTo="@(body)" header="#{bundle.EditRolesTitle}">
+            <h:form id="RolesEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" columnClasses="ui-grid-col-3, ui-grid-col-9" layout="grid" styleClass="ui-panelgrid-blank" rendered="#{rolesController.selected != null}">
+                        <p:outputLabel value="#{bundle.EditRolesLabel_rol}" for="rol" />
+                        <p:inputText id="rol" value="#{rolesController.selected.rol}" title="#{bundle.EditRolesTitle_rol}" required="true" requiredMessage="#{bundle.EditRolesRequiredMessage_rol}"/>
+                        <p:outputLabel value="#{bundle.EditRolesLabel_descripcion}" for="descripcion" />
+                        <p:inputText id="descripcion" value="#{rolesController.selected.descripcion}" title="#{bundle.EditRolesTitle_descripcion}" required="true" requiredMessage="#{bundle.EditRolesRequiredMessage_descripcion}"/>
+                    </p:panelGrid>
+                    <p:panelGrid columns="2" columnClasses="ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank" style="align-content: center; text-align: center;">                               
+                        <p:commandButton id="save" actionListener="#{rolesController.update}" value="#{bundle.Save}" disabled="#{not rolesController.ableToEdit}"
+                                         update="display,:RolesListForm:datalist,:growl" oncomplete="handleCallback(args, 'RolesEditDialog');" icon="fa fa-floppy-o" style="width: 100px; height: 40px; border-color: midnightblue;"/>
+                        <p:commandButton value="#{bundle.Cancel}" onclick="PF('RolesEditDialog').hide();" process="@this" partialSubmit="true"
+                                         icon="fa fa-ban" style="width: 100px; height: 40px; border-color: #212223; color: #212223; background-color: #FFFFFF;"/>        
+                    </p:panelGrid>
+                </h:panelGroup>
+                
+                <p:blockUI block="RolesEditDlg" trigger="save">
+                    <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank">
+                        <h:outputText value="Procesando..."/>
+                        <h:graphicImage url="/resources/img/loading_infinity.gif" width="55" height="55"/>
+                    </p:panelGrid>
+                </p:blockUI>
+                
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

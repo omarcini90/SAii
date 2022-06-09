@@ -1,0 +1,76 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+		<h:form id="CriterioForm">
+			<p:panel id="display">
+			
+					<f:facet name="header">
+				    	<p:link id="backButton" outcome="/reportes/consulta" style="float:left;margin-right:10px" styleClass="ui-icon ui-icon-arrowreturnthick-1-w" />
+				    	<h:outputText value="#{reportesController.reporte}" />
+					</f:facet>
+			
+                    <p:panelGrid columns="2" columnClasses="ui-grid-col-2, ui-grid-col-2" layout="grid" styleClass="ui-panelgrid-blank">
+                        <h:outputText value="&nbsp;"/>
+                        <h:outputText value="#{reportesController.ciclo.descripcion}" style="font-weight: bold; color: midnightblue;"/>                      
+                        
+                        <p:outputLabel value="¿Todas las instituciones?" rendered="#{reportesController.ableToSearch}"/>
+                        <b:switch value="#{reportesController.todas}" onText="SI" offText="NO" onColor="success" process="@this" update="@form" rendered="#{reportesController.ableToSearch}"/>
+
+                        <p:outputLabel id="institucionLabel" value="Institución*:" for="institucion" 
+                                       indicateRequired="#{not reportesController.todas}" rendered="#{not reportesController.todas}" />
+                        <p:selectOneMenu id="institucion" value="#{reportesController.institucion}" rendered="#{not reportesController.todas}" filter="true" filterMatchMode="contains"
+                                         required="#{not reportesController.todas}" requiredMessage="Seleccione la Institución" >
+                            <f:selectItems value="#{institucionesController.activeOnes}"
+                                           var="institucion"
+                                           itemValue="#{institucion}"/>
+                        </p:selectOneMenu>
+                        
+                        <p:outputLabel value="Estatus:" for="status"/>
+                        <p:selectOneButton id="status" value="#{reportesController.activos}" required="true" requiredMessage="Seleccione el estatus">
+            				<f:selectItem itemLabel="ACTIVOS" itemValue="activos" />
+            				<f:selectItem itemLabel="INACTIVOS" itemValue="inactivos" />
+            				<f:selectItem itemLabel="TODOS" itemValue="todos" />
+        				</p:selectOneButton>
+						
+                        <p:outputLabel value="Año*:" for="anio" indicateRequired="true"/>
+                        <p:selectManyMenu id="anio" value="#{reportesController.anios}" filter="true" filterMatchMode="contains" showCheckbox="true"
+                                         required="true" requiredMessage="Seleccione el año de captura">
+                            <f:selectItems value="#{defaultsMB.from2017}"
+                                           var="anio"
+                                           itemValue="#{anio}"/>
+                        </p:selectManyMenu>
+						
+                        <p:outputLabel value="Temporalidad*:" for="temporalidad" indicateRequired="true"/>
+                        <p:selectManyMenu id="temporalidad" value="#{reportesController.temporalidad}" filter="true" filterMatchMode="contains" showCheckbox="true"
+                                         required="true" requiredMessage="Seleccione la temporalidad" converter="temporalidadesConverter">
+                            <f:selectItems value="#{reportesController.temporalidades}" 
+                                           var="tempo" 
+                                           itemValue="#{tempo}" itemLabel="#{tempo.descripcion}"/>
+                        </p:selectManyMenu>
+                        
+                        <h:outputText value="&nbsp;"/>
+                        <p:commandButton id="search"  actionListener="#{reportesController.search}" value="Buscar" update=":ResultForm:datalist :growl" 
+                                         icon="fa fa-floppy-o" style="width: 100px; height: 40px; border-color: midnightblue;">
+                        </p:commandButton>
+                    </p:panelGrid>
+                </p:panel>
+
+                <p:blockUI block="@form" trigger="search">
+                    <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank">
+                        <h:outputText value="Procesando..."/>
+                        <h:graphicImage url="/resources/img/loading_infinity.gif" width="55" height="55"/>
+                    </p:panelGrid>
+                </p:blockUI>                
+            </h:form>
+
+    </ui:composition>
+
+</html>

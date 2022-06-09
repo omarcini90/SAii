@@ -1,0 +1,120 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:poue="http://primefaces.org/ui/extensions">
+
+    <ui:composition>        
+
+        <h:form id="IndicadoresListForm" onkeypress="return event.keyCode != 13;">
+            <p:panel id="panelIndicadores">
+                <f:facet name="header">
+                    <h:panelGrid columns="1">
+                        <h:outputText value="Indicadores"/>
+                        <h:outputText value="#{procesoController.selected.toString()}" style="font-size: small; font-weight: bold; color: midnightblue;" rendered="#{procesoController.selected != null}"/>
+                        <p:outputPanel layout="inline" rendered="#{procesoController.selected != null}">
+                            <h:outputText value="Periodo del " style="color: midnightblue; font-size: medium;"/>
+                            <h:outputText value="#{procesoController.periodo.fechaInicio}" style="font-size: medium;">
+                                <f:convertDateTime pattern="dd/MM/yyyy" />
+                            </h:outputText>
+                            <h:outputText value=" al " style="color: midnightblue; font-size: medium;"/>
+                            <h:outputText value="#{procesoController.periodo.fechaFin}" style="color: darkred; font-size: medium;" >
+                                <f:convertDateTime pattern="dd/MM/yyyy" />
+                            </h:outputText>
+                        </p:outputPanel>
+                    </h:panelGrid>
+                </f:facet>
+                <b:tabView id="tabViewTipo" active-index="0" pills="true" tabPosition="left" contentStyle="border: 1px solid #ddd;padding:10px;" content-disabled="false">
+                    <b:tab id="tabProcesos" title="TEMPORALIDADES">
+                        <ui:include src="/proceso/consulta.xhtml"/>
+                    </b:tab>
+
+                    <b:tab id="tabTipo" title="#{tipo.descripcion}" tooltip="Indicadores de #{tipo.descripcion}" value="#{procesoController.tiposIndicadores}" var="tipo"  rendered="#{procesoController.selected != null}">
+                        <f:facet name="anchor">
+                            <b:iconAwesome name="cog" spin="true"/>
+                        </f:facet>
+
+                        <p:panelGrid id="panelCampus" columns="2" columnClasses="ui-grid-col-2, ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank" rendered="#{tipo.idTipo == 2}">
+                            <p:outputLabel value="Del Campus:" for="campus" />
+                            <p:selectOneMenu id="campus" value="#{procesoController.selectedCampus}" filter="true" filterMatchMode="contains">
+                                <p:ajax listener="#{procesoController.changeCampus}" process="@this" onstart="PF('statusDialog').show();" oncomplete="PF('statusDialog').hide();" 
+                                update="@form :growl" />
+                                <f:selectItems value="#{procesoController.campus}"
+                                               var="c"
+                                               itemValue="#{c}"/>
+                            </p:selectOneMenu>
+                        </p:panelGrid>
+                        <p:panelGrid id="panelPrograma" columns="2" columnClasses="ui-grid-col-2, ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank" rendered="#{tipo.idTipo == 3}">
+                            <p:outputLabel value="Campus:" />
+                            <h:outputText id="textCampus" value="#{procesoController.selectedCampus.nombre}" style="font-weight: bold; color: midnightblue; font-size: medium;" />
+                            <p:outputLabel value="Del Programa:" for="programa" />
+                            <p:selectOneMenu id="programa" value="#{procesoController.selectedPrograma}" filter="true" filterMatchMode="contains">
+                                <p:ajax listener="#{procesoController.changePrograma}" process="@this" onstart="PF('statusDialog').show();" oncomplete="PF('statusDialog').hide();" 
+                                update="@form :growl" />
+                                <f:selectItems value="#{procesoController.programas}"
+                                               var="p"
+                                               itemValue="#{p}"/>
+                            </p:selectOneMenu>
+                        </p:panelGrid>
+                        <p:separator/>
+                        <b:tabView id="tabViewSeccion" active-index="0" contentStyle="border: 1px solid #ddd;padding:10px;" content-disabled="false">
+                            <b:tab id="tabSeccion" title="#{seccion.descripcion}" value="#{tipo.seccionList}" var="seccion">                                        
+
+                                <p:dataTable id="tableIndicadores" value="#{seccion.registroList}" var="i" rowKey="#{i.idRegistro}" emptyMessage="#{procesoController.noIndicatorsRecordMsg}"
+                                             scrollRows="20" scrollable="true" scrollHeight="400">
+                                    
+                                    <p:column>
+                                        <h:outputLabel value="#{i.idIndicador.idIndicador}. #{i.idIndicador.etiqueta} #{i.idIndicador.requerido ? '*' : ''}" style="color: #{i.idIndicador.requerido ? 'darkred;' : 'black;'}"/>
+                                    </p:column>
+
+                                    <p:column>
+                                        <p:inputNumber id="num#{i.idIndicador.idIndicador}" value="#{i.valor}" placeholder="#{i.valor == null ? '': i.valor}" 
+                                                     title="#{i.idIndicador.esOperador ? 'Es sumando del indicador No. '.concat(i.idIndicador.idIndicadorTotal) : i.idIndicador.explicacion}" 
+                                                     required="#{i.idIndicador.requerido}" requiredMessage="Ingrese un valor para el indicador No. #{i.idIndicador.idIndicador}" disabled="#{not procesoController.ableToEdit}" 
+                                                     rendered="#{i.idIndicador.tipoDato.equalsIgnoreCase('NUMERICO')}" size="5" maxlength="8" 
+                                                     onkeypress="if (event.keyCode == 13) {e.preventDefault(); return false; }">
+                                            <p:keyFilter regEx="pnum"/>                                   
+                                            <p:ajax event="change" listener="#{procesoController.updateValor(i)}" process="@this IndicadoresListForm:tabTipo:1:campus IndicadoresListForm:tabTipo:2:programa" update="@this :growl"/>
+                                        </p:inputNumber>
+
+                                        <p:selectOneButton id="select#{i.idIndicador.idIndicador}" value="#{i.valor}" style="width: 80px;"
+                                                           rendered="#{i.idIndicador.tipoDato.equalsIgnoreCase('BOLEANO')}" disabled="#{not procesoController.ableToEdit}">
+                                            <f:selectItem itemLabel="No" itemValue="NO" />
+                                            <f:selectItem itemLabel="Si" itemValue="SI" />
+                                            <p:ajax event="change" listener="#{procesoController.updateValor(i)}" process="@this IndicadoresListForm:tabTipo:1:campus IndicadoresListForm:tabTipo:2:programa" update="@this :growl"/>
+                                        </p:selectOneButton>
+
+                                        <p:inputText id="text#{i.idIndicador.idIndicador}" value="#{i.valor}" placeholder="#{i.valor}" size="30" title="#{i.idIndicador.explicacion}"  
+                                                     required="#{i.idIndicador.requerido}" requiredMessage="Ingrese #{i.idIndicador.descripcion}" disabled="#{not procesoController.ableToEdit}" 
+                                                     rendered="#{i.idIndicador.tipoDato.equalsIgnoreCase('TEXTO')}"
+                                                     onkeypress="if (event.keyCode == 13) {e.preventDefault(); return false; }">
+                                            <p:ajax event="change" listener="#{procesoController.updateValor(i)}" process="@this IndicadoresListForm:tabTipo:1:campus IndicadoresListForm:tabTipo:2:programa" update="@this :growl"/>
+                                        </p:inputText>
+                                    </p:column>                                    
+                                </p:dataTable>
+
+                            </b:tab>
+                        </b:tabView>
+
+                    </b:tab>
+                    <b:tab id="tabAvance" title="AVANCE" rendered="#{procesoController.selected != null}" onclick="ajax: procesoController.updateAvance();" process="@this" update="@this:panelAvance"> 
+                        <ui:include src="/proceso/avance.xhtml"/>
+                    </b:tab>
+                </b:tabView>
+            </p:panel>
+
+            <p:confirmDialog id="confirmDialog" global="true" showEffect="fade" hideEffect="fade" closeOnEscape="true">
+                <p:commandButton value="SI" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                <p:commandButton value="NO" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+            </p:confirmDialog>
+
+        </h:form>
+
+    </ui:composition>
+
+	<!-- Copyright© www.ula.edu.mx | Developed by omar.josue@gmail.com -->
+</html>

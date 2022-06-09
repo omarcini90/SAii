@@ -1,0 +1,92 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:poue="http://primefaces.org/ui/extensions"
+      xmlns:b="http://bootsfaces.net/ui">
+
+    <ui:composition template="/WEB-INF/templates/fullLayoutTemplate.xhtml">
+    
+    	<f:metadata>
+    		<f:viewParam name="init" value="#{layoutController.initial}"/>
+		</f:metadata>
+
+        <ui:define name="title">
+            <h:outputText value="Carga masiva de indicadores"></h:outputText>
+        </ui:define>
+
+        <ui:define name="content">
+            <h:form id="CargaForm">
+                <p:panel id="display" header="Carga #{layoutController.initial ? 'inicial' : ''} de Indicadores" style="width: 600px; margin: 0 auto;">
+                    <p:panelGrid columns="1" columnClasses="ui-grid-col-12" layout="grid" styleClass="ui-panelgrid-blank">
+                    	<h:outputText value="&nbsp;"/>
+                    	<p:fileUpload id="uploadDoc" widgetVar="uploadDoc" label="Seleccionar archivo" fileUploadListener="#{layoutController.upload}" auto="true" mode="advanced" dragDropSupport="true" 
+                                  process="@this" update=":growl gridDoc save" allowTypes="/(\.|\/)(xls|xlsx)$/" onstart="PF('statusDialog').show();" oncomplete="PF('statusDialog').hide();"
+                                  invalidSizeMessage="El archivo supera el límite permitido" invalidFileMessage="Solo se permiten archivos en formato Excel" cancelLabel="Cancelar" uploadLabel="Cargar"/>
+						
+						<h:outputText value="&nbsp;"/>
+                    	<p:dataTable id="gridDoc" emptyMessage="No ha adjuntado el archivo" value="#{layoutController.layout}" var="archivo">                        
+                        	<p:column headerText="Archivo" style="width: 80%;">
+                            	<h:outputText value="#{archivo.name}" style="font-weight: bold;"/>
+                        	</p:column>
+                        	<p:column  headerText="Eliminar" style="text-align: center; width: 20%;">
+                            	<p:commandLink title="Eliminar" actionListener="#{layoutController.remove}" 
+                            					partialSubmit="true" process="@this" update="@form:display:gridDoc @form:display:save :growl" class="fa fa-trash-o">
+                            	</p:commandLink>
+                        	</p:column>
+                    	</p:dataTable>
+						
+                        <p:selectOneMenu id="anio" label="Año:" value="#{layoutController.anio}" filter="true" filterMatchMode="contains"
+                                         required="true" requiredMessage="Seleccione el año a cargar">
+                            <f:selectItems value="#{defaultsMB.from2017}"
+                                           var="anio"
+                                           itemValue="#{anio}"/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>	
+                    <p:panelGrid columns="2" columnClasses="ui-grid-col-2, ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank" rendered="#{not layoutController.initial}">
+                        <p:outputLabel value="Temporalidad:" for="temporalidad" indicateRequired="true"/>
+                        <p:selectOneMenu id="temporalidad" value="#{layoutController.temporalidad}" filter="true" filterMatchMode="contains"
+                                         required="true" requiredMessage="Seleccione la temporalidad" converter="temporalidadesConverter">
+                            <!-- p:ajax process="@this" update="ciclo"/ -->
+                            <f:selectItems value="#{layoutController.temporalidades}"
+                                           var="temporalidad"
+                                           itemValue="#{temporalidad}" itemLabel="#{temporalidad.descripcion}"/>
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="Ciclo:" for="ciclo" indicateRequired="true" rendered="false"/>
+                        <p:selectOneMenu id="ciclo" value="#{layoutController.ciclo}" filter="true" filterMatchMode="contains"
+                                         required="true" requiredMessage="Seleccione el ciclo" rendered="false">
+                            <f:selectItems value="#{layoutController.temporalidad.ciclosList}"
+                                           var="ciclo"
+                                           itemValue="#{ciclo}" itemLabel="#{ciclo.descripcion}"/>
+                        </p:selectOneMenu>
+					</p:panelGrid>
+					<p:panelGrid columns="1" columnClasses="ui-grid-col-12" layout="grid" styleClass="ui-panelgrid-blank">
+                        <p:commandButton id="save" actionListener="#{layoutController.process}" value="Procesar" process="@this anio ciclo" update="@form :growl" 
+                                         icon="fa fa-floppy-o" style="width: 100px; height: 40px; border-color: midnightblue;" disabled="#{layoutController.layout == null}">
+                            <p:confirm header="Procesar Layout" message="¿Desea cargar la información contenida en el Layout? Se sobreescribirán los valores" icon="fa fa-exclamation-triangle" />
+                        </p:commandButton>
+                    </p:panelGrid>
+                </p:panel>
+                
+                <p:confirmDialog id="confirmDialog" global="true" showEffect="fade" hideEffect="fade" closeOnEscape="true">
+                    <p:commandButton value="SI" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                    <p:commandButton value="NO" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                </p:confirmDialog>
+
+                <p:blockUI block="display" trigger="save">
+                    <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank">
+                        <h:outputText value="Procesando..."/>
+                        <h:graphicImage url="/resources/img/loading_infinity.gif" width="55" height="55"/>
+                    </p:panelGrid>
+                </p:blockUI>                
+            </h:form>
+		
+        </ui:define>
+
+    </ui:composition>
+
+</html>

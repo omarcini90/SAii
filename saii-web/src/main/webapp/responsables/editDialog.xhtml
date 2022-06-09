@@ -1,0 +1,78 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:poue="http://primefaces.org/ui/extensions"
+      xmlns:b="http://bootsfaces.net/ui">
+
+    <ui:composition>
+
+        <p:dialog id="UsuariosEditDlg" widgetVar="UsuariosEditDialog" modal="true" resizable="false" width="500px" height="500px" responsive="true" appendTo="@(body)" header="Editar Responsable">
+            <h:form id="UsuariosEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" columnClasses="ui-grid-col-3, ui-grid-col-9" layout="grid" styleClass="ui-panelgrid-blank" rendered="#{usuariosController.selected != null}">
+                        <p:outputLabel value="Título:" for="titulo"/>
+                        <p:selectOneMenu id="titulo" value="#{usuariosController.selected.titulo}" required="true" requiredMessage="Seleccione un título">
+                            <f:selectItem itemLabel="LIC." itemValue="LIC." />
+                            <f:selectItem itemLabel="ING." itemValue="ING." />
+                            <f:selectItem itemLabel="ARQ." itemValue="ARQ." />
+                            <f:selectItem itemLabel="ABG." itemValue="ABG." />
+                            <f:selectItem itemLabel="C.P." itemValue="C.P." />
+                            <f:selectItem itemLabel="MTRO." itemValue="MTRO." />
+                            <f:selectItem itemLabel="DR." itemValue="DR." />
+                            <f:selectItem itemLabel="C." itemValue="C." />
+                        </p:selectOneMenu>
+                        <p:outputLabel value="#{bundle.EditUsuariosLabel_nombre}" for="nombre" />
+                        <p:inputText id="nombre" value="#{usuariosController.selected.nombre}" title="#{bundle.EditUsuariosTitle_nombre}" required="true" requiredMessage="#{bundle.EditUsuariosRequiredMessage_nombre}"/>
+                        <p:outputLabel value="#{bundle.EditUsuariosLabel_apaterno}" for="apaterno" />
+                        <p:inputText id="apaterno" value="#{usuariosController.selected.apaterno}" title="#{bundle.EditUsuariosTitle_apaterno}" required="true" requiredMessage="#{bundle.EditUsuariosRequiredMessage_apaterno}"/>
+                        <p:outputLabel value="#{bundle.EditUsuariosLabel_amaterno}" for="amaterno" />
+                        <p:inputText id="amaterno" value="#{usuariosController.selected.amaterno}" title="#{bundle.EditUsuariosTitle_amaterno}" required="true" requiredMessage="#{bundle.EditUsuariosRequiredMessage_amaterno}"/>
+                        <p:outputLabel value="#{bundle.EditUsuariosLabel_rfc}" for="rfc" />
+                        <p:inputText id="rfc" value="#{usuariosController.selected.rfc}" title="#{bundle.EditUsuariosTitle_rfc}" />
+                        <p:outputLabel value="#{bundle.EditUsuariosLabel_curp}" for="curp" />
+                        <p:inputText id="curp" value="#{usuariosController.selected.curp}" title="#{bundle.EditUsuariosTitle_curp}" />
+                        <p:outputLabel value="Cargo:" for="cargo" />
+                        <p:inputText id="cargo" value="#{usuariosController.selected.cargo}" title="Puesto" rendered="true" requiredMessage="Ingrese el cargo" />
+                        <p:outputLabel value="Teléfono:" for="tel" />
+                        <p:inputText id="tel" value="#{usuariosController.selected.telPrincipal}" title="Teléfono principal" required="true" requiredMessage="Ingrese el número telefónico" />
+                        <p:outputLabel value="Correo:" for="correo" />
+                        <p:inputText id="correo" value="#{usuariosController.selected.correo}" title="Correo electrónico" required="true" 
+                                     requiredMessage="Ingrese el correo electrónico" validatorMessage="Ingrese un correo válido">
+                            <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                        </p:inputText>
+                        <p:outputLabel value="#{bundle.EditUsuariosLabel_idInstitucion}" for="idInstitucion" />
+                        <p:selectOneMenu id="idInstitucion" value="#{usuariosController.selected.idInstitucion}" filter="true" filterMatchMode="contains"
+                                         required="true" requiredMessage="#{bundle.EditUsuariosRequiredMessage_idInstitucion}">
+                            <f:selectItems value="#{institucionesController.activeOnes}"
+                                           var="institucion"
+                                           itemValue="#{institucion}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="Activar:" />
+                        <b:switch id="activo" value="#{usuariosController.selected.activo}" onText="SI" offText="NO" onColor="success"/>   
+                    </p:panelGrid>
+                    <p:panelGrid columns="2" columnClasses="ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank" style="align-content: center; text-align: center;">                               
+                        <p:commandButton id="save" actionListener="#{usuariosController.update}" value="#{bundle.Save}" update="display,:UsuariosListForm:datalist,:growl" 
+                                         oncomplete="handleCallback(args, 'UsuariosEditDialog');" icon="fa fa-floppy-o" 
+                                         style="width: 100px; height: 40px; border-color: midnightblue;"/>
+                        <p:commandButton value="#{bundle.Cancel}" onclick="PF('UsuariosEditDialog').hide();" process="@this" partialSubmit="true"
+                                         icon="fa fa-ban" style="width: 100px; height: 40px; border-color: #212223; color: #212223; background-color: #FFFFFF;"/>        
+                    </p:panelGrid>
+                </h:panelGroup>
+                
+                <p:blockUI block="UsuariosEditDlg" trigger="save">
+                    <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank">
+                        <h:outputText value="Procesando..."/>
+                        <h:graphicImage url="/resources/img/loading_infinity.gif" width="55" height="55"/>
+                    </p:panelGrid>
+                </p:blockUI>
+                
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+
+</html>

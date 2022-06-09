@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="IndicadoresViewDlg" widgetVar="IndicadoresViewDialog" modal="true" resizable="false" responsive="true" appendTo="@(body)" header="Indicador">
+            <h:form id="IndicadoresViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" columnClasses="ui-grid-col-3, ui-grid-col-9" layout="grid" styleClass="ui-panelgrid-blank" rendered="#{indicadoresController.selected != null}">
+                        <p:outputLabel value="Etiqueta:"/>
+                        <h:outputText value="#{indicadoresController.selected.etiqueta}"/>                        
+                        <p:outputLabel value="Descripción:"/>
+                        <h:outputText value="#{indicadoresController.selected.descripcion}"/>                       
+                        <p:outputLabel value="Explicación:"/>
+                        <h:outputText value="#{indicadoresController.selected.explicacion != null ? indicadoresController.selected.explicacion : 'Sin especificar'}"/>
+                        <p:outputLabel value="Tipo:"/>
+                        <h:outputText value="#{indicadoresController.selected.idTipo.descripcion}"/>                        
+                        <p:outputLabel value="Sección:"/>
+                        <h:outputText value="#{indicadoresController.selected.idSeccion.descripcion}"/>
+                        <p:outputLabel value="¿Es Subindicador?"/>
+                        <b:switch value="#{indicadoresController.selected.esOperador}" onText="SI" offText="NO" onColor="success" readonly="true"/>                        
+                        <p:outputLabel value="Indicador de SUMA:" rendered="#{indicadoresController.selected.esOperador}"/>
+                        <h:outputText value="#{indicadoresController.getById(indicadoresController.selected.idIndicadorTotal)}" rendered="#{indicadoresController.selected.esOperador}" />                        
+                        <p:outputLabel value="¿Es requerido?"/>
+                        <b:switch value="#{indicadoresController.selected.requerido}" onText="SI" offText="NO" onColor="success" readonly="true"/>
+                        <p:outputLabel value="Activo:"/>
+                        <b:switch value="#{indicadoresController.selected.activo}" onText="SI" offText="NO" onColor="success" readonly="true"/>
+                        <p:outputLabel value="Actualización:"/>
+                        <h:outputText value="#{indicadoresController.selected.fechaActualizacion}">
+                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm" timeZone="#{defaultsMB.cdmxTimeZone}"/>
+                        </h:outputText>
+                    </p:panelGrid>
+                    <p:panelGrid columns="1" columnClasses="ui-grid-col-12" layout="grid" styleClass="ui-panelgrid-blank" style="align-content: center; text-align: center;">
+                        <p:commandButton value="#{bundle.Close}" onclick="PF('IndicadoresViewDialog').hide();" process="@this" partialSubmit="true"
+                                         icon="fa fa-times" style="width: 100px; height: 40px; border-color: #212223; color: #212223; background-color: #FFFFFF;"/>        
+                    </p:panelGrid>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+
+</html>
